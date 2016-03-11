@@ -191,6 +191,7 @@ bool ft::FaceDatasetModel::addImages(const QStringList &lImageFiles)
 		m_lCachedThumbnails.append(buildThumbnail(m_pFaceDataset->size() - 1));
 	}
 	endInsertRows();
+	emit dataChanged(index(iFirst), index(iLast));
 	return true;
 }
 
@@ -206,6 +207,7 @@ bool ft::FaceDatasetModel::removeImages(const QList<int> &lImageIndexes)
 		m_lCachedThumbnails.removeAt(lImageIndexes[i]);
 	}
 	endRemoveRows();
+	emit dataChanged(index(0), index(lImageIndexes.size() - 1));
 	return true;
 }
 
