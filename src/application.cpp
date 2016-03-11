@@ -39,9 +39,10 @@ ft::FtApplication::FtApplication(int argc, char* argv[]): QApplication(argc, arg
 {
     m_pMainWindow = NULL;
 
-    QCoreApplication::setOrganizationName("Luiz Carlos Vieira");
+	// Information used to store the program settings
+    QCoreApplication::setOrganizationName("Flat");
     QCoreApplication::setOrganizationDomain("https://github.com/luigivieira/Facial-Landmarks-Annotation-Tool.git");
-    QCoreApplication::setApplicationName("FLAT - Facial Landmarks Annotation Tool");
+    QCoreApplication::setApplicationName("Data");
 
 	QString sAppFile = QCoreApplication::applicationFilePath();
 	QString sDocPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)) + QDir::separator();

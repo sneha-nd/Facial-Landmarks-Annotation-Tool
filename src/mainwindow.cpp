@@ -84,8 +84,8 @@ ft::MainWindow::MainWindow(QWidget *pParent) :
 	m_pViewButton->setIcon(QIcon(":/icons/viewicons")); // By default display the image thumbnails
 	ui->treeImages->setVisible(false);
 
-	// Initialize other variables
-	m_sDocumentsPath = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)) + QDir::separator();
+	// Default path for file dialogs is the standard documents path
+	m_sLastPathUsed = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)) + QDir::separator();
 
 	// Add the action shortcuts to the tooltips (in order to make it easier for the user to know they exist)
 	// P.S.: I wonder why doesn't Qt do that automatically... :)
@@ -109,6 +109,7 @@ ft::MainWindow::~MainWindow()
 	QSettings oSettings;
 	oSettings.setValue("geometry", saveGeometry());
 	oSettings.setValue("windowState", saveState());
+	oSettings.setValue("lastPathUsed", m_sLastPathUsed);
 
     if(m_pAbout)
         delete m_pAbout;
@@ -177,6 +178,9 @@ void ft::MainWindow::showEvent(QShowEvent *pEvent)
 	QSettings oSettings;
 	restoreState(oSettings.value("windowState").toByteArray());
 	restoreGeometry(oSettings.value("geometry").toByteArray());
+	QVariant vValue = oSettings.value("lastPathUsed");
+	if (vValue.isValid())
+		m_sLastPathUsed = vValue.toString();
 
 	// Update UI elements
 	updateUI();
@@ -195,9 +199,10 @@ void ft::MainWindow::on_actionNew_triggered()
 // +-----------------------------------------------------------
 void ft::MainWindow::on_actionOpen_triggered()
 {
-    QString sFile = QFileDialog::getOpenFileName(this, tr("Open face annotation dataset..."), m_sDocumentsPath, tr("Face Annotation Dataset files (*.fad);; Todos os arquivos (*.*)"));
+    QString sFile = QFileDialog::getOpenFileName(this, tr("Open face annotation dataset..."), m_sLastPathUsed, tr("Face Annotation Dataset files (*.fad);; Todos os arquivos (*.*)"));
     if(sFile.length())
 	{
+		m_sLastPathUsed = QFileInfo(sFile).absolutePath();
 		sFile = QDir::toNativeSeparators(sFile);
 		int iPage = getFilePageIndex(sFile);
 		if(iPage != -1)
@@ -255,6 +260,7 @@ bool ft::MainWindow::saveCurrentFile(bool bAskForFileName)
 				return false;
 			}
 
+			m_sLastPathUsed = QFileInfo(sFileName).absolutePath();
 			return true;
 		}
 		else
@@ -339,9 +345,10 @@ void ft::MainWindow::on_actionAddImage_triggered()
 	if(!pChild)
 		return;
 
-    QStringList lsFiles = QFileDialog::getOpenFileNames(this, tr("Select face images..."), m_sDocumentsPath, tr("Common image files (*.bmp *.png *.jpg *.gif);; All files (*.*)"));
+    QStringList lsFiles = QFileDialog::getOpenFileNames(this, tr("Select face images..."), m_sLastPathUsed, tr("Common image files (*.bmp *.png *.jpg *.gif);; All files (*.*)"));
 	if(lsFiles.size())
 	{
+		m_sLastPathUsed = QFileInfo(lsFiles[0]).absolutePath();
 		pChild->dataModel()->addImages(lsFiles);
 		if(!pChild->selectionModel()->currentIndex().isValid())
 			pChild->selectionModel()->setCurrentIndex(pChild->dataModel()->index(0, 0), QItemSelectionModel::Select);
@@ -655,7 +662,7 @@ ft::ChildWindow* ft::MainWindow::createChildWindow(QString sFileName, bool bModi
 	// Define the window attributes
 	if(!sFileName.length())
 	{
-		sFileName = QString(tr("%1new face annotation dataset.fad")).arg(m_sDocumentsPath);
+		sFileName = QString(tr("%1new face annotation dataset.fad")).arg(m_sLastPathUsed);
 		bModified = true;
 	}
 

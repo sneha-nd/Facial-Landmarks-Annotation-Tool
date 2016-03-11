@@ -265,8 +265,8 @@ namespace ft
         /** Instance of the about dialog box. */
         AboutWindow* m_pAbout;
 
-		/** Standard path to read from/write to documents in the native OS. */
-		QString m_sDocumentsPath;
+		/** Last path used in File Dialogs. */
+		QString m_sLastPathUsed;
 
 		/** Instance of a dropdown button for the view mode of the image list. */
 		QMenu *m_pViewButton;
