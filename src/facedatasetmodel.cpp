@@ -241,7 +241,11 @@ QPixmap ft::FaceDatasetModel::buildThumbnail(const int iIndex)
 	if(!pImage)
 		oImage = QPixmap(":/images/imagemissing");
 	else
+	{
 		oImage = pImage->pixMap();
+		if(oImage.isNull())
+			oImage = QPixmap(":/images/imagemissing");
+	}
 
 	oImage = oImage.scaled(50, 50, Qt::IgnoreAspectRatio);
 	return oImage;

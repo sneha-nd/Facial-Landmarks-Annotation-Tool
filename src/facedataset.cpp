@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QDir>
 #include <QApplication>
 
 using namespace std;
@@ -55,6 +56,9 @@ bool ft::FaceDataset::loadFromFile(const QString &sFileName, QString &sMsgError)
 		sMsgError = QString(QApplication::translate("FaceDataset", "it was not possible to read from file [%1]")).arg(sFileName);
         return false;
     }
+
+	// Used to resolve the image file names relative to the saved file path
+	QDir oBase(QFileInfo(sFileName).absolutePath());
 
 	QTextStream oData(&oFile);
 	QString sData = oData.readAll();
@@ -109,6 +113,7 @@ bool ft::FaceDataset::loadFromFile(const QString &sFileName, QString &sMsgError)
 			sMsgError = QString(QApplication::translate("FaceDataset", "there is an error in the contents of the file [%1]: %2")).arg(sFileName, sError);
 			return false;
 		}
+		pSample->setFileName(oBase.absoluteFilePath(pSample->fileName()));
 		vSamples.push_back(pSample);
 	}
 
@@ -132,7 +137,7 @@ bool ft::FaceDataset::saveToFile(const QString &sFileName, QString &sMsgError) c
 	oDoc.appendChild(oInstr);
 
 	// Root node
-	QDomElement oRoot = oDoc.createElementNS("http://www.luiz.vieira.nom.br/ft/", "FaceDataset");
+	QDomElement oRoot = oDoc.createElementNS("https://github.com/luigivieira/Facial-Landmarks-Annotation-Tool", "FaceDataset");
 	oDoc.appendChild(oRoot);
 
 	oRoot.setAttribute("numberOfFeatures", m_iNumFeatures);
@@ -141,8 +146,14 @@ bool ft::FaceDataset::saveToFile(const QString &sFileName, QString &sMsgError) c
 	QDomElement oSamples = oDoc.createElement("Samples");
 	oRoot.appendChild(oSamples);
 
+	// Used to make the image file names relative to the saved file path
+	QDir oBase(QFileInfo(sFileName).absolutePath());
+
 	foreach(FaceImage *pImage, m_vSamples)
+	{
+		pImage->setFileName(oBase.relativeFilePath(pImage->fileName()));
 		pImage->saveToXML(oSamples);
+	}
 
 	/******************************************************
 	 * Save the file

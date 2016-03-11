@@ -240,7 +240,7 @@ void ft::MainWindow::on_actionSaveAs_triggered()
 bool ft::MainWindow::saveCurrentFile(bool bAskForFileName)
 {
 	ChildWindow *pChild = (ChildWindow*) ui->tabWidget->currentWidget();
-	if(!pChild || !pChild->isWindowModified())
+	if(!pChild || (!bAskForFileName && !pChild->isWindowModified()))
 		return false;
 
 	if(bAskForFileName)

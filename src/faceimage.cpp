@@ -52,6 +52,12 @@ QString ft::FaceImage::fileName() const
 }
 
 // +-----------------------------------------------------------
+void ft::FaceImage::setFileName(QString sFileName)
+{
+	m_sFileName = sFileName;
+}
+
+// +-----------------------------------------------------------
 bool ft::FaceImage::loadFromXML(const QDomElement &oElement, QString &sMsgError, int iNumExpectedFeatures)
 {
 	// Check the element name

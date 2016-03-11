@@ -58,6 +58,12 @@ namespace ft
 		QString fileName() const;
 
 		/**
+		 * Sets the file name of the face image.
+		 * @param sFileName QString with the new file name for the face image.
+		 */
+		void setFileName(QString sFileName);
+
+		/**
 		 * Adds a new face feature to the face image.
 		 * @param iID Integer with the ID of the face feature.
 		 * @param x Float with the x coordinate of the face feature.
