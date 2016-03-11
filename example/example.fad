@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<FaceDataset xmlns="https://github.com/luigivieira/Facial-Landmarks-Annotation-Tool" numberOfFeatures="0">
+    <Samples>
+        <Sample fileName="images/Angelina.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Brad.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Chris.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Ewan.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Hayley.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Natalie.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Scarlett.jpg">
+            <Features/>
+        </Sample>
+        <Sample fileName="images/Tom.jpg">
+            <Features/>
+        </Sample>
+    </Samples>
+</FaceDataset>
