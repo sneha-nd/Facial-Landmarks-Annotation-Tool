@@ -148,11 +148,14 @@ bool ft::FaceDataset::saveToFile(const QString &sFileName, QString &sMsgError) c
 
 	// Used to make the image file names relative to the saved file path
 	QDir oBase(QFileInfo(sFileName).absolutePath());
+	QString sSave;
 
 	foreach(FaceImage *pImage, m_vSamples)
 	{
+		sSave = pImage->fileName(); // Save the absolute path (it is still used in the editor)
 		pImage->setFileName(oBase.relativeFilePath(pImage->fileName()));
 		pImage->saveToXML(oSamples);
+		pImage->setFileName(sSave);
 	}
 
 	/******************************************************
@@ -246,6 +249,24 @@ bool ft::FaceDataset::removeFeature(const int iIndex)
 	foreach(FaceImage *pSample, m_vSamples)
 		pSample->removeFeature(iIndex);
 	m_iNumFeatures--;
+
+	return true;
+}
+
+// +-----------------------------------------------------------
+bool ft::FaceDataset::connectFeatures(int iIDSource, int iIDTarget)
+{
+	foreach(FaceImage *pSample, m_vSamples)
+		pSample->connectFeatures(iIDSource, iIDTarget);
+
+	return true;
+}
+
+// +-----------------------------------------------------------
+bool ft::FaceDataset::disconnectFeatures(int iIDSource, int iIDTarget)
+{
+	foreach(FaceImage *pSample, m_vSamples)
+		pSample->disconnectFeatures(iIDSource, iIDTarget);
 
 	return true;
 }

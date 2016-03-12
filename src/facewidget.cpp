@@ -408,6 +408,28 @@ ft::FaceFeatureEdge* ft::FaceWidget::connectFaceFeatures(FaceFeatureNode* pSourc
 }
 
 // +-----------------------------------------------------------
+ft::FaceFeatureEdge* ft::FaceWidget::connectFaceFeatures(int iSource, int iTarget)
+{
+	FaceFeatureNode *pSource = NULL, *pTarget = NULL;
+	QList<FaceFeatureNode *> lFeats = getFaceFeatures();
+	foreach(FaceFeatureNode *pFeat, lFeats)
+	{
+		if (pFeat->getID() == iSource)
+			pSource = pFeat;
+		else if (pFeat->getID() == iTarget)
+			pTarget = pFeat;
+
+		if (pSource && pTarget)
+			break;
+	}
+
+	if (pSource && pTarget)
+		return connectFaceFeatures(pSource, pTarget);
+	else
+		return NULL;
+}
+
+// +-----------------------------------------------------------
 void ft::FaceWidget::disconnectFaceFeatures(FaceFeatureNode* pSource, FaceFeatureNode* pTarget)
 {
 	FaceFeatureEdge *pEdge = pSource->getEdgeTo(pTarget);

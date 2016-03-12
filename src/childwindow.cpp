@@ -205,11 +205,18 @@ void ft::ChildWindow::onCurrentChanged(const QModelIndex &oCurrent, const QModel
 void ft::ChildWindow::refreshFeaturesInWidget()
 {
 	vector<FaceFeature*> vFeats = m_pFaceDatasetModel->getFeatures(m_iCurrentImage);
-	QList<FaceFeatureNode*> lsNodes = m_pFaceWidget->getFaceFeatures(m_pFaceDatasetModel->numFeatures());
+	QList<FaceFeatureNode*> lsNodes = m_pFaceWidget->getFaceFeatures(m_pFaceDatasetModel->numFeatures()); // This call automatically guarantees that there are "m_pFaceDatasetModel->numFeatures()" features in the editor
 	for(int i = 0; i < (int) vFeats.size(); i++)
 	{
 		lsNodes[i]->setData(0, true); // Indication to avoid emitting position change event
+
+		// Refresh the feature visual in the widget:
+		//    - (re)position the feature
+		//    - (re)do any connections
 		lsNodes[i]->setPos(vFeats[i]->x, vFeats[i]->y);
+		foreach(int iID, vFeats[i]->getConnections())
+			m_pFaceWidget->connectFaceFeatures(vFeats[i]->getID(), iID);
+
 		lsNodes[i]->setData(0, false);
 	}
 }
@@ -338,6 +345,7 @@ void ft::ChildWindow::connectFeatures()
 		for(oSecond = oFirst + 1; oSecond != lsFeats.end(); oSecond++)
 		{
 			m_pFaceWidget->connectFaceFeatures(*oFirst, *oSecond);
+			m_pFaceDatasetModel->connectFeatures((*oFirst)->getID(), (*oSecond)->getID());
 			bUpdated = true;
 		}
 	}
@@ -357,6 +365,7 @@ void ft::ChildWindow::disconnectFeatures()
 		for(oSecond = oFirst + 1; oSecond != lsFeats.end(); oSecond++)
 		{
 			m_pFaceWidget->disconnectFaceFeatures(*oFirst, *oSecond);
+			m_pFaceDatasetModel->disconnectFeatures((*oFirst)->getID(), (*oSecond)->getID());
 			bUpdated = true;
 		}
 	}

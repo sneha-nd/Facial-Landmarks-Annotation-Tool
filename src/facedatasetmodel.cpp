@@ -224,6 +224,18 @@ void ft::FaceDatasetModel::removeFeature(const int iIndex)
 }
 
 // +-----------------------------------------------------------
+void ft::FaceDatasetModel::connectFeatures(int iIDSource, int iIDTarget)
+{
+	m_pFaceDataset->connectFeatures(iIDSource, iIDTarget);
+}
+
+// +-----------------------------------------------------------
+void ft::FaceDatasetModel::disconnectFeatures(int iIDSource, int iIDTarget)
+{
+	m_pFaceDataset->disconnectFeatures(iIDSource, iIDTarget);
+}
+
+// +-----------------------------------------------------------
 std::vector<ft::FaceFeature*> ft::FaceDatasetModel::getFeatures(const int iIndex)
 {
 	return m_pFaceDataset->getImageFeatures(iIndex);

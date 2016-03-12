@@ -135,6 +135,20 @@ namespace ft
 		void removeFeature(const int iIndex);
 
 		/**
+		 * Connects the two given features in the face dataset.
+		 * @param iIDSource Integer with the ID of the source feature.
+		 * @param iIDTarget Integer with the ID of the target feature.
+		 */
+		void connectFeatures(int iIDSource, int iIDTarget);
+
+		/**
+		* Disconnects the two given features in the face dataset.
+		* @param iIDSource Integer with the ID of the source feature.
+		* @param iIDTarget Integer with the ID of the target feature.
+		*/
+		void disconnectFeatures(int iIDSource, int iIDTarget);
+
+		/**
 		 * Gets all features in the given face image index.
 		 * @param iIndex Integer with the index of the face image to query.
 		 * @return Vector of FaceFeature instances with the face features in the image.

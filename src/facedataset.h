@@ -130,6 +130,22 @@ namespace ft
 		bool removeFeature(const int iIndex);
 
 		/**
+		* Connects the two given features.
+		* @param iIDSource Integer with the ID of the source feature.
+		* @param iIDTarget Integer with the ID of the target feature.
+		* @return Boolean indicating if the connection was successfully created.
+		*/
+		bool connectFeatures(int iIDSource, int iIDTarget);
+
+		/**
+		* Disconnects the two given features.
+		* @param iIDSource Integer with the ID of the source feature.
+		* @param iIDTarget Integer with the ID of the target feature.
+		* @return Boolean indicating if the connection was successfully removed.
+		*/
+		bool disconnectFeatures(int iIDSource, int iIDTarget);
+
+		/**
 		 * Gets the list of face features in the given image index.
 		 * @param iIndex Integer with the index of the image to query the face features.
 		 * @param A vector of FaceFeature instances with the face features in the image. It returns

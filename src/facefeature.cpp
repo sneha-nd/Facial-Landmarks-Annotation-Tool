@@ -18,8 +18,10 @@
  */
 
 #include "facefeature.h"
-
 #include <QApplication>
+#include <algorithm>
+
+using namespace std;
 
 // +-----------------------------------------------------------
 ft::FaceFeature::FaceFeature():
@@ -45,6 +47,28 @@ int ft::FaceFeature::getID() const
 void ft::FaceFeature::setID(int iID)
 {
 	m_iID = iID;
+}
+
+// +-----------------------------------------------------------
+void ft::FaceFeature::connectTo(FaceFeature *pOther)
+{
+	vector<int>::iterator it = find(m_vConnections.begin(), m_vConnections.end(), pOther->getID());
+	if (it == m_vConnections.end())
+		m_vConnections.push_back(pOther->getID());
+}
+
+// +-----------------------------------------------------------
+void ft::FaceFeature::disconnectFrom(FaceFeature *pOther)
+{
+	vector<int>::iterator it = find(m_vConnections.begin(), m_vConnections.end(), pOther->getID());
+	if (it != m_vConnections.end())
+		m_vConnections.erase(it);
+}
+
+// +-----------------------------------------------------------
+std::vector<int> ft::FaceFeature::getConnections()
+{
+	return m_vConnections;
 }
 
 // +-----------------------------------------------------------
@@ -78,9 +102,31 @@ bool ft::FaceFeature::loadFromXML(const QDomElement &oElement, QString &sMsgErro
 		return false;
 	}
 
+	// Connetions
+	QDomElement oConnections = oElement.firstChildElement("Connections");
+	if (oConnections.isNull())
+	{
+		sMsgError = QString(QApplication::translate("FaceFeature", "the node '%1' does not exist")).arg("Connections");
+		return false;
+	}
+
+	vector<int> vConnections;
+	for (QDomElement oConn = oConnections.firstChildElement(); !oConn.isNull(); oConn = oConn.nextSiblingElement())
+	{
+		QString sValue = oConn.attribute("id");
+		if (sValue == "")
+		{
+			sMsgError = QString(QApplication::translate("FaceFeature", "the attribute '%1' does not exist or it contains an invalid value").arg("id"));
+			return false;
+		}
+
+		vConnections.push_back(sValue.toInt());
+	}
+
 	m_iID = sID.toInt();
 	x = sValueX.toFloat();
 	y = sValueY.toFloat();
+	m_vConnections = vConnections;
 	
 	return true;
 }
@@ -91,7 +137,21 @@ void ft::FaceFeature::saveToXML(QDomElement &oParent) const
 	QDomElement oFeature = oParent.ownerDocument().createElement("Feature");
 	oParent.appendChild(oFeature);
 
+	// Save the feature attributes
 	oFeature.setAttribute("id", m_iID);
 	oFeature.setAttribute("x", x);
 	oFeature.setAttribute("y", y);
+
+	// Add the "Connections" subnode
+	QDomElement oConnections = oParent.ownerDocument().createElement("Connections");
+	oFeature.appendChild(oConnections);
+
+	// Save all the connections
+	QDomElement oTarget;
+	foreach(int iID, m_vConnections)
+	{
+		oTarget = oParent.ownerDocument().createElement("Target");
+		oConnections.appendChild(oTarget);
+		oTarget.setAttribute("id", iID);
+	}
 }

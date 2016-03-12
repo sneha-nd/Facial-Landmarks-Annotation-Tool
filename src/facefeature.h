@@ -21,8 +21,8 @@
 #define FACE_FEATURE_H
 
 #include <QDomDocument>
-
 #include <opencv2/core/core.hpp>
+#include <vector>
 
 namespace ft
 {
@@ -59,6 +59,24 @@ namespace ft
 		void setID(int iID);
 
 		/**
+		 * Connects this feature to the feature of given ID.
+		 * @param *pOther Pointer to the other feature to connect to.
+		 */
+		void connectTo(FaceFeature *pOther);
+
+		/**
+		* Disconnects this feature from the feature of given ID.
+		* @param pOther Pointer to the other feature to disconnect from.
+		*/
+		void disconnectFrom(FaceFeature *pOther);
+
+		/**
+		 * Gets the list of features (by their IDs) to which this feature is connected to.
+		 * @return Std vector with a list of integers (the connected features' IDs).
+		 */
+		std::vector<int> getConnections();
+
+		/**
 		 * Loads (unserializes) the face feature data from the given xml element.
 		 * @param oElement QDomElement from where to read the feature data (the feature node in the xml).
 		 * @param sMsgError QString to receive the error message in case the method fails.
@@ -77,6 +95,8 @@ namespace ft
 		/** Identifier of the face feature. */
 		int m_iID;
 
+		/** List of other features to which this feature is connected to. */
+		std::vector<int> m_vConnections;
     };
 }
 

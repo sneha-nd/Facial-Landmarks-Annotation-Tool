@@ -42,7 +42,10 @@ void ft::FaceImage::clear()
 {
 	foreach(FaceFeature *pFeature, m_vFeatures)
 		delete pFeature;
+	foreach(FaceFeatureEdge *pEdge, m_vConnections)
+		delete pEdge;
 	m_vFeatures.clear();
+	m_vConnections.clear();
 }
 
 // +-----------------------------------------------------------
@@ -171,5 +174,33 @@ bool ft::FaceImage::removeFeature(const int iIndex)
 	m_vFeatures.erase(m_vFeatures.begin() + iIndex);
 	delete pFeat;
 
+	return true;
+}
+
+// +-----------------------------------------------------------
+bool ft::FaceImage::connectFeatures(int iIDSource, int iIDTarget)
+{
+	if (iIDSource < 0 || iIDSource >= (int)m_vFeatures.size())
+		return false;
+	if (iIDTarget < 0 || iIDTarget >= (int)m_vFeatures.size())
+		return false;
+
+	FaceFeature *pSource = m_vFeatures[iIDSource];
+	FaceFeature *pTarget = m_vFeatures[iIDTarget];
+	pSource->connectTo(pTarget);
+	return true;
+}
+
+// +-----------------------------------------------------------
+bool ft::FaceImage::disconnectFeatures(int iIDSource, int iIDTarget)
+{
+	if (iIDSource < 0 || iIDSource >= (int)m_vFeatures.size())
+		return false;
+	if (iIDTarget < 0 || iIDTarget >= (int)m_vFeatures.size())
+		return false;
+
+	FaceFeature *pSource = m_vFeatures[iIDSource];
+	FaceFeature *pTarget = m_vFeatures[iIDTarget];
+	pSource->disconnectFrom(pTarget);
 	return true;
 }

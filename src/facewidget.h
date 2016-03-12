@@ -138,6 +138,14 @@ namespace ft
 		FaceFeatureEdge* connectFaceFeatures(FaceFeatureNode* pSource, FaceFeatureNode* pTarget);
 
 		/**
+		* Adds a new face feature edge connecting two existing nodes, based on their IDs.
+		* @param iSource Integer with the ID of the first face feature node.
+		* @param iTarget Integer with the ID of the second face feature node.
+		* @return Pointer to the instance of the newly added face feature edge connecting the two nodes.
+		*/
+		FaceFeatureEdge* connectFaceFeatures(int iSource, int iTarget);
+
+		/**
 		 * Removes the face feature edge connecting two existing nodes.
 		 * @param pSource Pointer to the instance of the first face feature node.
 		 * @param pTarget Pointer to the instance of the second face feature node.

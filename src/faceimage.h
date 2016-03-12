@@ -21,6 +21,7 @@
 #define FACE_IMAGE_H
 
 #include "facefeature.h"
+#include "facefeatureedge.h"
 
 #include <opencv2/core/core.hpp>
 #include <QString>
@@ -95,6 +96,22 @@ namespace ft
 		bool removeFeature(const int iIndex);
 
 		/**
+		* Connects the two given features.
+		* @param iIDSource Integer with the ID (index) of the source feature.
+		* @param iIDTarget Integer with the ID (index) of the target feature.
+		* @return Boolean indicating if the connection was successfully created.
+		*/
+		bool connectFeatures(int iIDSource, int iIDTarget);
+
+		/**
+		* Disconnects the two given features.
+		* @param iIDSource Integer with the ID (index) of the source feature.
+		* @param iIDTarget Integer with the ID (index) of the target feature.
+		* @return Boolean indicating if the connection was successfully removed.
+		*/
+		bool disconnectFeatures(int iIDSource, int iIDTarget);
+
+		/**
 		 * Loads (unserializes) the face image data from the given xml element.
 		 * @param oElement QDomElement from where to read the image data (the image node in the xml).
 		 * @param sMsgError QString to receive the error message in case the method fails.
@@ -137,6 +154,9 @@ namespace ft
 
 		/** Vector of the face features in this face image. */
 		std::vector<FaceFeature*> m_vFeatures;
+
+		/** Vector of the connections between face features in this face image. */
+		std::vector<FaceFeatureEdge*> m_vConnections;
     };
 }
 
