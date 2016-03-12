@@ -11,10 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ferramenta de Anotação de Faces</string>
+   <string>FLAT - Facial Landmarks Annotation Tool</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
