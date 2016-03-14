@@ -21,8 +21,6 @@
 #include "mainwindow.h"
 #include "application.h"
 
-#include <opencv2/core/core.hpp>
-
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QApplication>
@@ -32,7 +30,6 @@
 #include <vector>
 
 using namespace std;
-using namespace cv;
 
 // +-----------------------------------------------------------
 ft::ChildWindow::ChildWindow(QWidget *pParent) :
@@ -213,7 +210,7 @@ void ft::ChildWindow::refreshFeaturesInWidget()
 		// Refresh the feature visual in the widget:
 		//    - (re)position the feature
 		//    - (re)do any connections
-		lsNodes[i]->setPos(vFeats[i]->x, vFeats[i]->y);
+		lsNodes[i]->setPos(vFeats[i]->x(), vFeats[i]->y());
 		foreach(int iID, vFeats[i]->getConnections())
 			m_pFaceWidget->connectFaceFeatures(vFeats[i]->getID(), iID);
 
@@ -237,8 +234,8 @@ void ft::ChildWindow::updateFeaturesInDataset()
 		}
 		pNode = lsNodes.at(i);
 		vFeats[i]->setID(pNode->getID());
-		vFeats[i]->x = pNode->x();
-		vFeats[i]->y = pNode->y();
+		vFeats[i]->setX(pNode->x());
+		vFeats[i]->setY(pNode->y());
 	}
 }
 

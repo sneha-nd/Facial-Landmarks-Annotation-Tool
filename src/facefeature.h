@@ -21,15 +21,15 @@
 #define FACE_FEATURE_H
 
 #include <QDomDocument>
-#include <opencv2/core/core.hpp>
 #include <vector>
+#include <QPoint>
 
 namespace ft
 {
 	/**
 	 * Represents the data of a facial feature in the image dataset.
 	 */
-	class FaceFeature : public cv::Point2f
+	class FaceFeature : public QPoint
     {
 	public:
 

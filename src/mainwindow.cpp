@@ -24,9 +24,6 @@
 #include "utils.h"
 #include "application.h"
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
 #include <vector>
 
 #include <QApplication>
@@ -37,7 +34,6 @@
 #include <QMessageBox>
 #include <QTemporaryFile>
 
-using namespace cv;
 using namespace std;
 
 // +-----------------------------------------------------------

@@ -24,15 +24,13 @@
 using namespace std;
 
 // +-----------------------------------------------------------
-ft::FaceFeature::FaceFeature():
-	cv::Point2f()
+ft::FaceFeature::FaceFeature():	QPoint()
 {
 	setID(-1);
 }
 
 // +-----------------------------------------------------------
-ft::FaceFeature::FaceFeature(int iID, float x, float y):
-	cv::Point2f(x, y)
+ft::FaceFeature::FaceFeature(int iID, float x, float y): QPoint(x, y)
 {
 	setID(iID);
 }
@@ -124,8 +122,8 @@ bool ft::FaceFeature::loadFromXML(const QDomElement &oElement, QString &sMsgErro
 	}
 
 	m_iID = sID.toInt();
-	x = sValueX.toFloat();
-	y = sValueY.toFloat();
+	setX(sValueX.toFloat());
+	setY(sValueY.toFloat());
 	m_vConnections = vConnections;
 	
 	return true;
@@ -139,8 +137,8 @@ void ft::FaceFeature::saveToXML(QDomElement &oParent) const
 
 	// Save the feature attributes
 	oFeature.setAttribute("id", m_iID);
-	oFeature.setAttribute("x", x);
-	oFeature.setAttribute("y", y);
+	oFeature.setAttribute("x", x());
+	oFeature.setAttribute("y", y());
 
 	// Add the "Connections" subnode
 	QDomElement oConnections = oParent.ownerDocument().createElement("Connections");

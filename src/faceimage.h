@@ -23,7 +23,6 @@
 #include "facefeature.h"
 #include "facefeatureedge.h"
 
-#include <opencv2/core/core.hpp>
 #include <QString>
 #include <QPixmap>
 #include <QDomDocument>
@@ -132,13 +131,6 @@ namespace ft
 		 * @return A QPixmap with the image data, or an empty QPixmap if an error ocurred.
 		 */
 		QPixmap pixMap() const;
-
-		/**
-		 * Loads and returns the image data as an OpenCV's matrix (Mat). If an error occur during the loading of
-		 * the file, an empty matrix is returned instead (that can be checked with Mat::empty()).
-		 * @return A Mat with the image data, or an empty Mat if an error ocurred.
-		 */
-		cv::Mat mat() const;
 
 	protected:
 

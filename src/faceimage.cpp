@@ -20,10 +20,8 @@
 #include "faceimage.h"
 
 #include <QApplication>
-#include <opencv2/highgui/highgui.hpp>
 
 using namespace std;
-using namespace cv;
 
 // +-----------------------------------------------------------
 ft::FaceImage::FaceImage(const QString &sFileName)
@@ -132,13 +130,6 @@ QPixmap ft::FaceImage::pixMap() const
 {
 	QPixmap oRet;
 	oRet.load(m_sFileName);
-	return oRet;
-}
-
-// +-----------------------------------------------------------
-Mat ft::FaceImage::mat() const
-{
-	Mat oRet = imread(m_sFileName.toStdString());
 	return oRet;
 }
 

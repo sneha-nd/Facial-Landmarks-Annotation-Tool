@@ -49,10 +49,6 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Xml REQUIRED)
 
-# OpenCV configuration
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-
 # Add all source and resource files
 file(GLOB SRC src/*.cpp src/*.h)
 file(GLOB RSC src/*.qrc)
@@ -68,4 +64,3 @@ set_target_properties(FLAT PROPERTIES OUTPUT_NAME_DEBUG flatd)
 
 # Set up the required libraries
 target_link_libraries(FLAT Qt5::Core Qt5::Widgets Qt5::Xml)
-target_link_libraries(FLAT ${OpenCV_LIBS})

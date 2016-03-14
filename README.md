@@ -8,9 +8,8 @@ A visual editor for manually annotating facial landmarks in images of human face
 
 The application has been developed and tested with:
 
-- Qt 5.5.1 32-bit
-- OpenCV 3.1.0 32-bit
 - CMake 3.5.0-rc3
+- Qt 5.5.1 32-bit
 
 ## Building
 
