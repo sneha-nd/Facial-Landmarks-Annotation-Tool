@@ -2,6 +2,8 @@
 
 A visual editor for manually annotating facial landmarks in images of human faces.
 
+![Screenshot](screenshot.png)
+
 ## Dependences
 
 The application has been developed and tested with:
