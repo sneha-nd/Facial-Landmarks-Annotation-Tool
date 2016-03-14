@@ -356,7 +356,7 @@ void ft::MainWindow::onFitFinished(int iExitCode, QProcess::ExitStatus eExitStat
 	QFileInfo oFileInfo(m_sFitTempFile);
 	if (!oFileInfo.exists())
 	{
-		showStatusMessage(tr("The face fit utility executable seems to have returned no result. Please check its configuration."));
+		showStatusMessage(tr("The face fit utility could not fit the landmarks to this image."));
 		QFile::remove(m_sFitTempFile);
 		m_sFitTempFile = "";
 		return;
@@ -365,7 +365,7 @@ void ft::MainWindow::onFitFinished(int iExitCode, QProcess::ExitStatus eExitStat
 	vector<QPoint> vPoints = Utils::readFaceFitPointsFile(m_sFitTempFile);
 	if (vPoints.size() == 0)
 	{
-		showStatusMessage(tr("The face fit utility executable seems to have returned a wrong result. Please check its configuration."));
+		showStatusMessage(tr("The face fit utility could not fit the landmarks to this image."));
 		QFile::remove(m_sFitTempFile);
 		m_sFitTempFile = "";
 		return;
@@ -677,6 +677,7 @@ void ft::MainWindow::updateUI()
 	ui->actionRemoveFeature->setEnabled(bFeaturesSelected);
 	ui->actionConnectFeatures->setEnabled(bFeaturesConnectable);
 	ui->actionDisconnectFeatures->setEnabled(bConnectionsSelected);
+	ui->actionFitLandmarks->setEnabled(bItemsSelected);
 	m_pViewButton->setEnabled(bFileOpened);
 	ui->zoomSlider->setEnabled(bFileOpened);
 
