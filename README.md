@@ -4,19 +4,25 @@ A visual editor for manually annotating facial landmarks in images of human face
 
 ![Screenshot](screenshot.png)
 
+## Usage
+
+Create a new face annotation dataset (files with extension `.fad`) and add the face images. Then, add the facial features and connect then as desired using either the program menus or the context menu. The zoom can be controlled either from the widget control on the image properties tool window, or by holding CTRL and scrolling the mouse wheel. While zoomed, an image can also be side scrolled by holding SHIFT and scrolling the mouse wheel. Automatically fitting of 66 face landmarks can be performed via the "Fit Landmarks" option if the utility is available (see details bellow).
+
 ## Dependences
 
 The application has been developed and tested with:
 
-- CMake 3.5.0-rc3
-- Qt 5.5.1 32-bit
+- [CMake](https://cmake.org/) 3.5.0-rc3
+- [Qt](http://www.qt.io/) 5.5.1 32-bit
+
+The "Fit Landmarks" menu option (in "Tools/CSIRO Face Analysis SDK" menu) requires an external executable called `fit-fit(.exe)` - even though its absence does not prevent the FLAT tool from being compiled and used. Please check the [SDK web site](http://face.ci2cv.net/) and [the source code of my port to Windows/Linux](https://github.com/luigivieira/face-analysis-sdk). The option for an external dependence (instead of source code integration) is only to make the compilation of this project simpler and its usage broader.
 
 ## Building
 
 1. Use CMake to configure and generate the environment. I suggest using the folder `build`, since it is the one ignored by gitignore.
 2. In Windows, open the Visual Studio solution and build with the desired build type (*debug*, *release*, etc).
 3. In Linux, use type `make` to let the Makefile produce the binary in the build type configured by CMake.
-4. The code produces only a single executable named `flat(.exe)`, that depends on Qt and OpenCV dynamic libraries. It also depends on the Face Analysis SDK libraries.
+4. The code produces only a single executable named `flat(.exe)`, that depends only on Qt. If you want to use the "Fit Landmarks" option mentioned before, go to the CSIRO Face Analysis SDK page, download and build its libraries and executables. Then, configure in FLAT the path for the `face-fit(.exe)` executable.
 
 ## Credits
 
