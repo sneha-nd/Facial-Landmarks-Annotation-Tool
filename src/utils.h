@@ -21,6 +21,8 @@
 #define UTILS_H
 
 #include <QString>
+#include <QPoint>
+#include <vector>
 
 namespace ft
 {
@@ -50,6 +52,14 @@ namespace ft
 		 * standard.
          */
         static QString shortenPath(const QString &sPath, int iMaxLen = 100);
+
+		/**
+		 * Reads a points file produced by the face-fit utility.
+		 * @return A std::vector with a list of QPoint instances with the points
+		 * of facial landmarks fitted to an image, or an empty vector if the reading
+		 * failed.
+		 */
+		static std::vector<QPoint> readFaceFitPointsFile(QString sFileName);
     };
 }
 

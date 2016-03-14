@@ -23,6 +23,9 @@
 #include <QStringList>
 #include <QMultiMap>
 #include <QDir>
+#include <QTextStream>
+
+using namespace std;
 
 // +-----------------------------------------------------------
 ft::Utils::Utils()
@@ -89,4 +92,55 @@ QString ft::Utils::shortenPath(const QString &sPath, int iMaxLen)
 		sNewPath = QDir::separator() + QString("...");
 
 	return QDir::toNativeSeparators(sDriveLetter + sNewPath + sFileName);
+}
+
+// +-----------------------------------------------------------
+vector<QPoint> ft::Utils::readFaceFitPointsFile(QString sFileName)
+{
+	QFile oFile(sFileName);
+	if (!oFile.open(QFile::ReadOnly))
+		return vector<QPoint>();
+
+	QTextStream oStream(&oFile);
+	QString sLine;
+	QStringList lData;
+	int iNumPoints;
+
+	// Read the number of points from the first line
+	sLine = oStream.readLine();
+	lData = sLine.split(" ");
+	if (lData.size() != 2 || lData.at(0) != "n_points:")
+	{
+		oFile.close();
+		return vector<QPoint>();
+	}
+	else
+		iNumPoints = lData[1].toInt();
+
+	// Read the points
+	vector<QPoint> vPoints;
+	while (!oStream.atEnd())
+	{
+		sLine = oStream.readLine();
+		if (sLine == "{" || sLine == "}")
+			continue;
+
+		lData = sLine.split("\t");
+		if (lData.size() != 2)
+		{
+			oFile.close();
+			return vector<QPoint>();
+		}
+
+		float x = lData[0].toFloat();
+		float y = lData[1].toFloat();
+		vPoints.push_back(QPoint(x, y));
+	}
+
+	oFile.close();
+
+	if (vPoints.size() != iNumPoints)
+		return vector<QPoint>();
+	else
+		return vPoints;
 }

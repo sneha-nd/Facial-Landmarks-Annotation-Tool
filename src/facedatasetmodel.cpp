@@ -62,8 +62,11 @@ QVariant ft::FaceDatasetModel::headerData(int iSection, Qt::Orientation eOrienta
 		case Qt::DisplayRole:
 			switch(iSection)
 			{
-				case 0: // [Image]
-					return QApplication::translate("FaceDatasetModel", "Image");
+				case 0: // [Image Name]
+					return QApplication::translate("FaceDatasetModel", "Image Name");
+
+				case 1: // [File Path]
+					return QApplication::translate("FaceDatasetModel", "File Path");
 
 				default:
 					return QVariant();
@@ -98,6 +101,9 @@ QVariant ft::FaceDatasetModel::data(const QModelIndex &oIndex, int iRole) const
 			{
 				case 0: // [Image Name]
 					return QFileInfo(pImage->fileName()).baseName();
+
+				case 1: // [File Path]
+					return pImage->fileName();
 
 				default:
 					return QVariant();

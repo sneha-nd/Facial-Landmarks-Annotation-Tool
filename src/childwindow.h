@@ -189,6 +189,17 @@ namespace ft
 		 */
 		void disconnectFeatures();
 
+		/**
+		 * Moves the face features in the image currently on display according to the given
+		 * list of positions. If the number of face features is different than the number of
+		 * points, the model is updated accordingly (with features added or removed to match
+		 * the number of points).
+		 * @param vPoints A std::vector with the list of QPoint instances with the new
+		 * features' positions.
+		 * @return Boolean indicating if the reposition was successfully done or not.
+		 */
+		bool positionFeatures(std::vector<QPoint> vPoints);
+
 	protected:
 
 		/**

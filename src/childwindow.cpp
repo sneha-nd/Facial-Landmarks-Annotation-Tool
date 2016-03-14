@@ -372,3 +372,40 @@ void ft::ChildWindow::disconnectFeatures()
 	if(bUpdated)
 		onDataChanged();
 }
+
+// +-----------------------------------------------------------
+bool ft::ChildWindow::positionFeatures(std::vector<QPoint> vPoints)
+{
+	QList<FaceFeatureNode *> lFeats = m_pFaceWidget->getFaceFeatures(vPoints.size()); // this call automatically adds or removes features to match vPoints.size()
+	
+	// Adjust the dataset so it has the same amount of features as the widget
+	vector<FaceFeature*> vFeats = m_pFaceDatasetModel->getFeatures(m_iCurrentImage);
+	int iDiff = lFeats.size() - vFeats.size();
+
+	// If the widget has more features than the dataset, add the difference
+	if (iDiff > 0)
+	{
+		for (int i = 0; i < iDiff; i++)
+			m_pFaceDatasetModel->addFeature(lFeats.size() + i - 1, 0, 0);
+	}
+
+	// Else, if the widget has less features than the dataset, remove the difference
+	else if (iDiff < 0)
+	{
+		for (int i = 0; i < abs(iDiff); i++)
+			m_pFaceDatasetModel->removeFeature(lFeats.size() - i - 1);
+	}
+
+	// Move the features
+	FaceFeatureNode *pFeat;
+	for (unsigned int i = 0; i < vPoints.size(); i++)
+	{
+		pFeat = lFeats.at(i);
+		pFeat->setPos(vPoints[i]);
+	}
+	updateFeaturesInDataset();
+	setWindowModified(true);
+	emit onDataModified();
+
+	return true;
+}

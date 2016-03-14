@@ -11,14 +11,6 @@
         <file>resources/icons/add.png</file>
         <file>resources/icons/database.png</file>
         <file>resources/icons/delete.png</file>
-        <file>resources/icons/emotion-anger.png</file>
-        <file>resources/icons/emotion-contempt.png</file>
-        <file>resources/icons/emotion-disgust.png</file>
-        <file>resources/icons/emotion-fear.png</file>
-        <file>resources/icons/emotion-happiness.png</file>
-        <file>resources/icons/emotion-sadness.png</file>
-        <file>resources/icons/emotion-surprise.png</file>
-        <file>resources/icons/emotion-undefined.png</file>
         <file>resources/icons/information.png</file>
         <file>resources/icons/image-list.png</file>
         <file>resources/icons/image-properties.png</file>

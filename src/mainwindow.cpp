@@ -20,6 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "aboutwindow.h"
+#include "facefitconfig.h"
 #include "utils.h"
 #include "application.h"
 
@@ -34,6 +35,7 @@
 #include <QDesktopServices>
 #include <QAction>
 #include <QMessageBox>
+#include <QTemporaryFile>
 
 using namespace cv;
 using namespace std;
@@ -87,6 +89,12 @@ ft::MainWindow::MainWindow(QWidget *pParent) :
 	// Default path for file dialogs is the standard documents path
 	m_sLastPathUsed = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)) + QDir::separator();
 
+	// Default path for the face-fit utility
+	m_sFaceFitPath = "";
+	m_oFitProcess = new QProcess(this);
+	connect(m_oFitProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onFitError(::ProcessError)));
+	connect(m_oFitProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onFitFinished(int, QProcess::ExitStatus)));
+
 	// Add the action shortcuts to the tooltips (in order to make it easier for the user to know they exist)
 	// P.S.: I wonder why doesn't Qt do that automatically... :)
 	QObjectList lsObjects = children();
@@ -110,11 +118,14 @@ ft::MainWindow::~MainWindow()
 	oSettings.setValue("geometry", saveGeometry());
 	oSettings.setValue("windowState", saveState());
 	oSettings.setValue("lastPathUsed", m_sLastPathUsed);
+	oSettings.setValue("faceFitPath", m_sFaceFitPath);
 
     if(m_pAbout)
         delete m_pAbout;
 	if(m_pViewButton)
 		delete m_pViewButton;
+	if (m_oFitProcess)
+		delete m_oFitProcess;
     delete ui;
 }
 
@@ -181,7 +192,10 @@ void ft::MainWindow::showEvent(QShowEvent *pEvent)
 	QVariant vValue = oSettings.value("lastPathUsed");
 	if (vValue.isValid())
 		m_sLastPathUsed = vValue.toString();
-
+	vValue = oSettings.value("faceFitPath");
+	if (vValue.isValid())
+		m_sFaceFitPath = vValue.toString();
+	
 	// Update UI elements
 	updateUI();
 	ui->actionShowImagesList->setChecked(ui->dockImages->isVisible());
@@ -199,7 +213,7 @@ void ft::MainWindow::on_actionNew_triggered()
 // +-----------------------------------------------------------
 void ft::MainWindow::on_actionOpen_triggered()
 {
-    QString sFile = QFileDialog::getOpenFileName(this, tr("Open face annotation dataset..."), m_sLastPathUsed, tr("Face Annotation Dataset files (*.fad);; Todos os arquivos (*.*)"));
+    QString sFile = QFileDialog::getOpenFileName(this, tr("Open face annotation dataset..."), m_sLastPathUsed, tr("Face Annotation Dataset files (*.fad);; All files (*.*)"));
     if(sFile.length())
 	{
 		m_sLastPathUsed = QFileInfo(sFile).absolutePath();
@@ -289,6 +303,90 @@ bool ft::MainWindow::saveCurrentFile(bool bAskForFileName)
 void ft::MainWindow::on_actionExit_triggered()
 {
     QApplication::exit(0);
+}
+
+// +-----------------------------------------------------------
+void ft::MainWindow::on_actionConfigure_triggered()
+{
+	FaceFitConfig oConfig;
+	if (oConfig.exec() == FaceFitConfig::Accepted)
+		m_sFaceFitPath = oConfig.getFaceFitPath();
+}
+
+// +-----------------------------------------------------------
+void ft::MainWindow::on_actionFitLandmarks_triggered()
+{
+	// Only continue if the face-fit utilility is properly configured
+	if (m_sFaceFitPath.length() < 0 || !QFileInfo(m_sFaceFitPath).exists())
+	{
+		QMessageBox::critical(this, tr("Error running face-fit utility"), tr("The face-fit utility executable could not be executed. Please check its configuration."), QMessageBox::Ok);
+		return;
+	}
+
+	// Get the selected face annotation dataset
+	ChildWindow *pChild = (ChildWindow*)ui->tabWidget->currentWidget();
+	if (!pChild) // Sanity check
+		return;
+
+	// Get the path of the selected image in the dataset
+	QModelIndex oSelectedImage = pChild->selectionModel()->currentIndex();
+	QModelIndex oIdx = pChild->dataModel()->index(oSelectedImage.row(), 1);
+	QString sImageFile = pChild->dataModel()->data(oIdx, Qt::DisplayRole).toString();
+
+	// Build the arguments for the face-fit utility
+	QTemporaryFile oTemp("face-fit-results");
+	oTemp.open();
+	m_sFitTempFile = oTemp.fileName();
+	oTemp.close();
+	
+	QStringList oArgs;
+	oArgs << sImageFile << m_sFitTempFile;
+	m_oFitProcess->start(m_sFaceFitPath, oArgs, QProcess::ReadOnly);
+	showStatusMessage(tr("Face fit started. Please wait..."), 0);
+}
+
+// +-----------------------------------------------------------
+void ft::MainWindow::onFitError(QProcess::ProcessError eError)
+{
+	Q_UNUSED(eError);
+	QFile::remove(m_sFitTempFile);
+	m_sFitTempFile = "";
+	showStatusMessage(tr("The face fit utility executable failed to execute. Please check its configuration."));
+}
+
+// +-----------------------------------------------------------
+void ft::MainWindow::onFitFinished(int iExitCode, QProcess::ExitStatus eExitStatus)
+{
+	QFileInfo oFileInfo(m_sFitTempFile);
+	if (!oFileInfo.exists())
+	{
+		showStatusMessage(tr("The face fit utility executable seems to have returned no result. Please check its configuration."));
+		QFile::remove(m_sFitTempFile);
+		m_sFitTempFile = "";
+		return;
+	}
+
+	vector<QPoint> vPoints = Utils::readFaceFitPointsFile(m_sFitTempFile);
+	if (vPoints.size() == 0)
+	{
+		showStatusMessage(tr("The face fit utility executable seems to have returned a wrong result. Please check its configuration."));
+		QFile::remove(m_sFitTempFile);
+		m_sFitTempFile = "";
+		return;
+	}
+
+	QFile::remove(m_sFitTempFile);
+	m_sFitTempFile = "";
+
+
+	// Get the selected face annotation dataset
+	ChildWindow *pChild = (ChildWindow*)ui->tabWidget->currentWidget();
+	if (!pChild) // Sanity check
+		return;
+
+	// Reposition the features according to the face-fit results
+	pChild->positionFeatures(vPoints);
+	showStatusMessage(tr("Face fit completed successfully."));
 }
 
 // +-----------------------------------------------------------

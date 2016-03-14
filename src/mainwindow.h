@@ -21,6 +21,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QProcess>
 
 #include "aboutwindow.h"
 #include "childwindow.h"
@@ -145,6 +146,16 @@ namespace ft
          */
         void on_actionExit_triggered();
 
+		/**
+		* Slot for the menu Configure trigger event.
+		*/
+		void on_actionConfigure_triggered();
+
+		/**
+		* Slot for the menu Fit Landmarks trigger event.
+		*/
+		void on_actionFitLandmarks_triggered();
+
         /**
          * Slot for the menu Project trigger event.
          */
@@ -258,6 +269,18 @@ namespace ft
 		 */
 		void onUpdateUI();
 
+		/**
+		 * Captures the result (error) of the process executed for the face-fit utility.
+		 * @param eError QProcess::ProcessError enumeration with the error type.
+		 */
+		void onFitError(QProcess::ProcessError eError);
+
+		/**
+		* Captures the conclusion of the process executed for the face-fit utility.
+		* @param eExitStatus QProcess::ExitStatus enumeration with the utility exit status.
+		*/
+		void onFitFinished(int iExitCode, QProcess::ExitStatus eExitStatus);
+
     private:
         /** Instance of the ui for GUI element access. */
         Ui::MainWindow *ui;
@@ -268,8 +291,17 @@ namespace ft
 		/** Last path used in File Dialogs. */
 		QString m_sLastPathUsed;
 
+		/** Path to the face-fit utility. */
+		QString m_sFaceFitPath;
+
 		/** Instance of a dropdown button for the view mode of the image list. */
 		QMenu *m_pViewButton;
+
+		/** Process instance to execute the face-fit utility. */
+		QProcess *m_oFitProcess;
+
+		/** Name of the temporary file used for the face-fit utility. */
+		QString m_sFitTempFile;
     };
 };
 

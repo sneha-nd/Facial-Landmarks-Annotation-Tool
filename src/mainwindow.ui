@@ -164,9 +164,26 @@
     <addaction name="separator"/>
     <addaction name="menu_Facial_Landmarks"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="locale">
+     <locale language="English" country="UnitedKingdom"/>
+    </property>
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <widget class="QMenu" name="menu_CSIRO_Face_Analysis_SDK">
+     <property name="title">
+      <string>&amp;CSIRO Face Analysis SDK</string>
+     </property>
+     <addaction name="actionFitLandmarks"/>
+     <addaction name="actionConfigure"/>
+    </widget>
+    <addaction name="menu_CSIRO_Face_Analysis_SDK"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuShow"/>
+   <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="fileToolBar">
@@ -868,6 +885,27 @@
    </property>
    <property name="shortcut">
     <string>Shift+U</string>
+   </property>
+  </action>
+  <action name="actionFitLandmarks">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/fat</normaloff>:/icons/fat</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Fit Landmarks</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionConfigure">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/resources/icons/image-properties.png</normaloff>:/icons/resources/icons/image-properties.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Configure...</string>
    </property>
   </action>
  </widget>
