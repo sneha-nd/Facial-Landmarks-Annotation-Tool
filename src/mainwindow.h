@@ -147,14 +147,19 @@ namespace ft
         void on_actionExit_triggered();
 
 		/**
-		* Slot for the menu Configure trigger event.
-		*/
+		 * Slot for the menu Configure trigger event.
+		 */
 		void on_actionConfigure_triggered();
 
 		/**
-		* Slot for the menu Fit Landmarks trigger event.
-		*/
+		 * Slot for the menu Fit Landmarks trigger event.
+		 */
 		void on_actionFitLandmarks_triggered();
+
+		/**
+		* Slot for the menu Export Points File trigger event.
+		*/
+		void on_actionExportPointsFile_triggered();
 
         /**
          * Slot for the menu Project trigger event.

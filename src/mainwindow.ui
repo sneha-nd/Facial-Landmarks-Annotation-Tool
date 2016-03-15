@@ -176,6 +176,8 @@
       <string>&amp;CSIRO Face Analysis SDK</string>
      </property>
      <addaction name="actionFitLandmarks"/>
+     <addaction name="actionExportPointsFile"/>
+     <addaction name="separator"/>
      <addaction name="actionConfigure"/>
     </widget>
     <addaction name="menu_CSIRO_Face_Analysis_SDK"/>
@@ -602,6 +604,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionFitLandmarks"/>
+   <addaction name="actionExportPointsFile"/>
   </widget>
   <widget class="QToolBar" name="helpTollBar">
    <property name="windowTitle">
@@ -913,17 +916,31 @@
    <property name="text">
     <string>&amp;Fit Landmarks</string>
    </property>
+   <property name="toolTip">
+    <string>Attempts to automaticaly fit the face model (with 66 landmarks) to the currently selected face image using the face-fit utility from the CSIRO Face Analysis SDK</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionConfigure">
+   <property name="text">
+    <string>&amp;Configure...</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure the face-fit utility from the CSIRO Face Analysis SDK</string>
+   </property>
+  </action>
+  <action name="actionExportPointsFile">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/resources/icons/image-properties.png</normaloff>:/icons/resources/icons/image-properties.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Configure...</string>
+    <string>&amp;Export points file...</string>
+   </property>
+   <property name="toolTip">
+    <string>Exports the annotation in current selected image to a CSIRO Face Analysis SDK points file</string>
    </property>
   </action>
  </widget>

@@ -386,6 +386,45 @@ void ft::MainWindow::onFitFinished(int iExitCode, QProcess::ExitStatus eExitStat
 }
 
 // +-----------------------------------------------------------
+void ft::MainWindow::on_actionExportPointsFile_triggered()
+{
+	ChildWindow *pChild = (ChildWindow*)ui->tabWidget->currentWidget();
+	if (!pChild) // Sanity check
+		return;
+
+	QList<FaceFeatureNode *> lFeats = pChild->getFaceFeatures();
+	if(lFeats.size() == 0)
+	{
+		QMessageBox::critical(this, tr("Error exporting data"), tr("The exporting can not be done because there are no landmarks to export."), QMessageBox::Ok);
+		return;
+	}
+
+	QString sFileName = QFileDialog::getSaveFileName(this, tr("Export CSIRO points file..."), windowFilePath(), tr("CSIRO Face Analysis SDK points file (*.pts);; All files (*.*)"));
+	if (sFileName.length())
+	{
+		QFile oFile(sFileName);
+		if (!oFile.open(QFile::WriteOnly | QFile::Text))
+		{
+			QMessageBox::critical(this, tr("Error exporting data"), tr("The exporting failed because it was not possible to write to file [%1].").arg(sFileName), QMessageBox::Ok);
+			return;
+		}
+
+		QTextStream oStream(&oFile);
+		QString sData = QString("n_points: %1").arg(lFeats.size());
+		oStream << sData << endl;
+		oStream << "{" << endl;
+
+		foreach(FaceFeatureNode *pFeat, lFeats)
+		{
+			sData = QString("%1\t%2").arg(pFeat->x()).arg(pFeat->y());
+			oStream << sData << endl;
+		}
+		oStream << "}" << endl;
+		oFile.close();
+	}
+}
+
+// +-----------------------------------------------------------
 void ft::MainWindow::on_actionProject_triggered()
 {
 	QDesktopServices::openUrl(QUrl("https://github.com/luigivieira/Facial-Landmarks-Annotation-Tool.git"));
@@ -678,6 +717,7 @@ void ft::MainWindow::updateUI()
 	ui->actionConnectFeatures->setEnabled(bFeaturesConnectable);
 	ui->actionDisconnectFeatures->setEnabled(bConnectionsSelected);
 	ui->actionFitLandmarks->setEnabled(bItemsSelected);
+	ui->actionExportPointsFile->setEnabled(bItemsSelected);
 	m_pViewButton->setEnabled(bFileOpened);
 	ui->zoomSlider->setEnabled(bFileOpened);
 
