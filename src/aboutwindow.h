@@ -1,4 +1,5 @@
 //Dummy testing
+//Dummy testing 2
 /*
  * Copyright (C) 2016 Luiz Carlos Vieira (http://www.luiz.vieira.nom.br)
  *
