@@ -1,4 +1,5 @@
 /*
+ * Dummy comment
  * Copyright (C) 2016 Luiz Carlos Vieira (http://www.luiz.vieira.nom.br)
  *
  * This file is part of FLAT.
