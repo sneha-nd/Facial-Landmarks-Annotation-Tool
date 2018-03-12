@@ -1,3 +1,5 @@
+# Dummy commit 1
+
 # FLAT - Facial Landmarks Annotation Tool
 
 A visual editor for manually annotating facial landmarks in images of human faces.
